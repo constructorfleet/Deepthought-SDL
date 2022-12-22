@@ -1,13 +1,21 @@
-import {Resolver} from "@nestjs/graphql";
+import {Args, Query, Resolver} from "@nestjs/graphql";
+import {Password, User} from "../../graphql.schema";
 
-export type PasswordInput = {
-    password: string;
+export type Credentials = {
+    password: Password;
+    username: User;
+}
+
+export type LoginResult = {
+    password: Password;
+    username: User
 }
 
 @Resolver()
 export class QueryResolver {
-    async login(input: PasswordInput): Promise<string> {
+    @Query()
+    async login(@Args('input') input: Credentials): Promise<LoginResult> {
         console.log(input);
-        return input.password;
+        return input;
     }
 }

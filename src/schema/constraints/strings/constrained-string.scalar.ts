@@ -12,7 +12,7 @@ export const ConstrainedStringScalar = (scalar: GraphQLScalarType, constraints: 
         const errors = compositeValidation(
             value.toString(),
             ...Object.entries(constraints)
-                .map(([key, val]) => ensureString[key](val).validate(value))
+                .map(([key, val]) => ensureString[key](val).validate)
         );
         if (errors.length > 0) {
             throw new Error(errors.map((e) => e.message).join("\n"));

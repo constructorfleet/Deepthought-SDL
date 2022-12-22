@@ -7,6 +7,7 @@ import {join} from "path";
 import {GraphQLSchema} from "graphql/type";
 import {ConstraintsModule} from "./schema/constraints/constraints.module";
 import {ApolloDriver} from "@nestjs/apollo";
+import {QueryResolver} from "./schema/query/query.resolver";
 
 @Module({
     imports: [
@@ -22,13 +23,14 @@ import {ApolloDriver} from "@nestjs/apollo";
                         path: join(process.cwd(), 'src/graphql.schema.ts'),
                         customScalarTypeMapping: {
                             RegEx: 'string',
-                            Password: 'string'
+                            Password: 'string',
+                            User: 'string'
                         }
                     },
                     transformSchema: factory.transformSchema,
                 };
             },
-            imports: [ConstraintsModule],
+            imports: [ConstraintsModule, QueryResolver],
             inject: [ConstraintsFactory]
         }),],
     controllers: [AppController],

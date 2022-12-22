@@ -13,7 +13,7 @@ export const ConstrainedNumberScalar = (scalar: GraphQLScalarType, constraints: 
         const errors = compositeValidation(
             value,
             ...Object.entries(constraints)
-                .map(([key, val]) => ensureNumber[key](val).validate(value))
+                .map(([key, val]) => ensureNumber[key](val).validate)
         );
         if (errors.length > 0) {
             throw new Error(errors.map((e) => e.message).join("\n"));

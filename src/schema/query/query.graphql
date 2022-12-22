@@ -1,16 +1,22 @@
 """
 A user's password
 """
-scalar Password @constrainedString(minLength: 1, maxLength: 5, pattern: "/^[^a]*$/")
-scalar User
+scalar Password @constrainedString(minLength: 1, pattern: "^.*$") @masked
+scalar User @constrainedString(minLength: 1)
 
 """
-Input for logging in
+User credentials for logging in
 """
-input PasswordInput {
-    password: Password
+input Credential {
+    password: Password!
+    username: User!
+}
+
+type LoginResult {
+    username: User!
+    password: Password!
 }
 
 type Query {
-    login(input: PasswordInput): Password
+    login(input: Credential!): LoginResult
 }

@@ -4,24 +4,22 @@ import {ConstrainedFloatDirective, ConstrainedIntDirective} from "./numbers/cons
 import {ConstrainedListDirective} from "./lists/constrained-list.directive";
 import {GraphQLSchema} from "graphql/type";
 import {MapperKind, mapSchema} from "@graphql-tools/utils";
+import {MaskedDirective} from "../masked/masked.directive";
 
 @Injectable()
 export class ConstraintsFactory {
     transformSchema(schema: GraphQLSchema): GraphQLSchema {
         return mapSchema(schema, {
             [MapperKind.SCALAR_TYPE]: (scalarType) =>
-                [
+                MaskedDirective(schema, [
                     ConstrainedListDirective,
                     ConstrainedStringDirective,
                     ConstrainedFloatDirective,
                     ConstrainedIntDirective,
                 ].reduce(
-                    (scalar, directive) => {
-                        console.log(directive);
-                        return directive(schema, scalar)
-                    },
+                    (scalar, directive) => directive(schema, scalar),
                     scalarType
-                )
+                ))
         })
     }
 }
