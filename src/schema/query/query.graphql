@@ -1,5 +1,12 @@
+"""
+A user's password
+"""
 scalar Password @constrainedString(minLength: 1, maxLength: 5, pattern: "/^[^a]*$/")
+scalar User
 
+"""
+Input for logging in
+"""
 input PasswordInput {
     password: Password
 }

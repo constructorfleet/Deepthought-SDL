@@ -12,14 +12,14 @@ export const ConstrainedStringScalar = (scalar: GraphQLScalarType, constraints: 
         const errors = compositeValidation(
             value.toString(),
             ...Object.entries(constraints)
-                .map(([key, val]) => ensureString[key].validate(val))
+                .map(([key, val]) => ensureString[key](val).validate(value))
         );
         if (errors.length > 0) {
             throw new Error(errors.map((e) => e.message).join("\n"));
         }
         return value;
     }
-    scalar.description += `${scalar.description}\n${Object.entries(constraints).map(([key, val]) => ensureString[key].description)}`;
+    scalar.description += `${scalar.description}\n${Object.entries(constraints).map(([key, val]) => ensureString[key](val).description).join("\n")}`;
     scalar.parseLiteral = (valueNode) =>
         valueNode.kind === Kind.STRING
             ? validate(valueNode.value)
