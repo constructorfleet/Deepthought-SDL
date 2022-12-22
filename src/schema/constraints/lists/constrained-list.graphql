@@ -1,0 +1,4 @@
+directive @constrainedList(
+    minItems: Int,
+    maxItems: Int
+) on SCALAR

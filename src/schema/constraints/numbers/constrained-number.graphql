@@ -1,0 +1,14 @@
+directive @constrainedInt(
+    min: Int,
+    max: Int,
+    multipleOf: Int,
+    factorOf: Int
+) on SCALAR
+
+directive @constrainedFloat(
+    min: Float,
+    max: Float,
+    multipleOf: Float,
+    factorOf: Float,
+    divisibleBy: Float
+) on SCALAR

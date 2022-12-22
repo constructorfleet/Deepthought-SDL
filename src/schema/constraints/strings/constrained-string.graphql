@@ -1,0 +1,11 @@
+scalar RegEx @constrainedString(startsWith: "/", endsWith: "/", minLength: 2)
+
+directive @constrainedString(
+    minLength: Int,
+    maxLength: Int,
+    startsWith: String,
+    endsWith: String,
+    includes: String,
+    excludes: String,
+    pattern: RegEx
+) on SCALAR
