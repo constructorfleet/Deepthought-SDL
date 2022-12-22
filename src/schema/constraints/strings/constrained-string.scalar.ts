@@ -19,6 +19,7 @@ export const ConstrainedStringScalar = (scalar: GraphQLScalarType, constraints: 
         }
         return value;
     }
+
     scalar.description += `${scalar.description}\n${Object.entries(constraints).map(([key, val]) => ensureString[key](val).description).join("\n")}`;
     scalar.parseLiteral = (valueNode) =>
         valueNode.kind === Kind.STRING
