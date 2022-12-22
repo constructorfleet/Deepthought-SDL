@@ -1,4 +1,4 @@
-scalar RegEx @constrainedString(startsWith: "/", endsWith: "/", minLength: 2)
+scalar RegEx
 
 directive @constrainedString(
     minLength: Int,

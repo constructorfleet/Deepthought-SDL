@@ -2,6 +2,7 @@ import {GraphQLScalarType} from "graphql/type";
 import {ConstrainedListArguments} from "./constrained-list.directive";
 import {ensureList} from "./constrained-list.validation";
 import {Kind} from "graphql/language";
+import {ensureString} from "../strings/constrained-string.validation";
 
 const compositeValidation = (value: any[], ...validations: ((string) => undefined | Error)[]): Error[] =>
     validations.map((fn) => fn(value))
@@ -12,7 +13,7 @@ export const ConstrainedListScalar = (scalar: GraphQLScalarType, constraints: Co
         const errors = compositeValidation(
             value,
             ...Object.entries(constraints)
-                .map(([key, val]) => ensureList[key](val))
+                .map(([key, val]) => ensureList[key].validate(val))
         );
         if (errors.length > 0) {
             throw new Error(errors.map((e) => e.message).join("\n"));
@@ -20,6 +21,7 @@ export const ConstrainedListScalar = (scalar: GraphQLScalarType, constraints: Co
         return value;
     }
 
+    scalar.description += `${scalar.description}\n${Object.entries(constraints).map(([key, val]) => ensureString[key].description)}`;
     scalar.parseLiteral = (valueNode) =>
         valueNode.kind === Kind.LIST
             ? validate(valueNode.values)

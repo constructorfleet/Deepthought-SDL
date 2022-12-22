@@ -1,0 +1,9 @@
+scalar Password @constrainedString(minLength: 1, maxLength: 5, pattern: "/^[^a]*$/")
+
+input PasswordInput {
+    password: Password
+}
+
+type Query {
+    login(input: PasswordInput): Password
+}

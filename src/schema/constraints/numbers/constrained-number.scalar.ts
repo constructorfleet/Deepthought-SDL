@@ -2,6 +2,7 @@ import {GraphQLScalarType} from "graphql/type";
 import {ConstrainedNumberArguments} from "./constrained-number.directive";
 import {ensureNumber} from "./constrained-number.validation";
 import {Kind} from "graphql/language";
+import {ensureString} from "../strings/constrained-string.validation";
 
 const compositeValidation = (value: number, ...validations: ((number) => undefined | Error)[]): Error[] =>
     validations.map((fn) => fn(value))
@@ -12,7 +13,7 @@ export const ConstrainedNumberScalar = (scalar: GraphQLScalarType, constraints: 
         const errors = compositeValidation(
             value,
             ...Object.entries(constraints)
-                .map(([key, val]) => ensureNumber[key](val))
+                .map(([key, val]) => ensureNumber[key].validate(val))
         );
         if (errors.length > 0) {
             throw new Error(errors.map((e) => e.message).join("\n"));
@@ -20,6 +21,7 @@ export const ConstrainedNumberScalar = (scalar: GraphQLScalarType, constraints: 
         return value;
     }
 
+    scalar.description += `${scalar.description}\n${Object.entries(constraints).map(([key, val]) => ensureString[key].description)}`;
     scalar.parseLiteral = (valueNode) =>
         valueNode.kind === Kind.INT
             ? validate(valueNode.value)
