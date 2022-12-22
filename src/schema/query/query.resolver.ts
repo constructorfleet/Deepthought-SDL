@@ -1,6 +1,7 @@
 import {Args, Query, Resolver} from "@nestjs/graphql";
-import {Password, User} from "../../graphql.schema";
-
+// import {Password, User} from "../../graphql.schema";
+declare type Password = string;
+declare type User = string;
 export type Credentials = {
     password: Password;
     username: User;
@@ -11,11 +12,16 @@ export type LoginResult = {
     username: User
 }
 
-@Resolver()
+@Resolver('Query')
 export class QueryResolver {
-    @Query()
+    @Query("login")
     async login(@Args('input') input: Credentials): Promise<LoginResult> {
         console.log(input);
         return input;
+    }
+
+    @Query("fail")
+    async fail(@Args("val") val: string): Promise<boolean> {
+        return false;
     }
 }

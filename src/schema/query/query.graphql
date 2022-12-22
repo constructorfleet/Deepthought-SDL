@@ -19,4 +19,5 @@ type LoginResult {
 
 type Query {
     login(input: Credential!): LoginResult
+    fail(val: String): Boolean
 }
