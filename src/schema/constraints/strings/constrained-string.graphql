@@ -1,4 +1,4 @@
-scalar RegEx
+scalar RegularExpression
 
 directive @constrainedString(
     minLength: Int,
@@ -7,5 +7,5 @@ directive @constrainedString(
     endsWith: String,
     includes: String,
     excludes: String,
-    pattern: RegEx
+    pattern: RegularExpression
 ) on SCALAR

@@ -1,11 +1,12 @@
 import {Injectable} from "@nestjs/common";
 import {ConstrainedStringDirective} from "./strings/constrained-string.directive";
-import {ConstrainedFloatDirective, ConstrainedIntDirective} from "./numbers/constrained-number.directive";
-import {ConstrainedListDirective} from "./lists/constrained-list.directive";
 import {GraphQLBoolean, GraphQLFloat, GraphQLInt, GraphQLSchema, GraphQLString} from "graphql/type";
 import {MapperKind, mapSchema} from "@graphql-tools/utils";
 import {MaskedDirective} from "../masked/masked.directive";
 import {GraphQLError} from "graphql/error";
+import {ConstrainScalar} from "./scalar.constraints";
+import {ConstrainedFloatDirective, ConstrainedIntDirective} from "./numbers/constrained-number.directive";
+import {ConstrainedListDirective} from "./lists/constrained-list.directive";
 
 const ensureAllowedScalarType = (name: string) => {
     if ([GraphQLFloat.name, GraphQLInt.name, GraphQLString.name, GraphQLBoolean.name].includes(name)) {
@@ -35,14 +36,15 @@ export class ConstraintsFactory {
             },
             [MapperKind.SCALAR_TYPE]: (scalarType) =>
                 MaskedDirective(schema, [
-                    ConstrainedListDirective,
                     ConstrainedStringDirective,
-                    ConstrainedFloatDirective,
                     ConstrainedIntDirective,
-                ].reduce(
-                    (scalar, directive) => directive(schema, scalar),
-                    scalarType
-                ))
+                    ConstrainedFloatDirective,
+                    ConstrainedListDirective
+                ].map(ConstrainScalar)
+                    .reduce(
+                        (scalar, constrainedScalar) => constrainedScalar(schema, scalar),
+                        scalarType
+                    ))
         })
     }
 }

@@ -22,7 +22,7 @@ import {QueryResolver} from "./schema/query/query.resolver";
                     definitions: {
                         path: join(process.cwd(), 'src/graphql.schema.ts'),
                         customScalarTypeMapping: {
-                            RegEx: 'string',
+                            RegularExpression: 'RegExp',
                             Password: 'string',
                             User: 'string'
                         }

@@ -19,9 +19,4 @@ export class QueryResolver {
         console.log(input);
         return input;
     }
-
-    @Query("fail")
-    async fail(@Args("val") val: string): Promise<boolean> {
-        return false;
-    }
 }
